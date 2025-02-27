@@ -1,4 +1,4 @@
-from database import Base
+from .database import Base
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, Date, Boolean, Float, Text, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
@@ -75,8 +75,8 @@ class User(Base):
     first_name = Column(String(250))
     last_name = Column(String(250))
     username = Column(String(120), unique=True, nullable=True)
-    email = Column(String(120), unique=True, nullable=True)
-    password_hash = Column(String(128), nullable=True)
+    email = Column(String(120), nullable=True)
+    password = Column(String(128), nullable=True)
     usertype_id = Column(Integer, ForeignKey('usertype.id'), nullable=True)  # Foreign Key to UserType
     image = Column(Text, default='', nullable=True)
     gender = Column(String(1), nullable=True)

@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 router = APIRouter(
-    tags=["core_ams"],
+    tags=["core"],
     prefix="/core_ams"
 )
 
