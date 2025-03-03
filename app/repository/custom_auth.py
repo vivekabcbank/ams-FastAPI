@@ -1,8 +1,9 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
-from .. import models, schemas, hashing, token
+from .. import models, schemas, hashing, app_token
 from sqlalchemy import and_
-
+from fastapi.security import OAuth2PasswordRequestForm
+from pdb import set_trace
 
 def insertEmployee(request: schemas.EmployeeBase, db: Session):
     errors = {}
@@ -76,18 +77,20 @@ def insertEmployee(request: schemas.EmployeeBase, db: Session):
     return new_employee
 
 
-def userSignin(request: schemas.Login, db: Session):
+def userSignin(request: OAuth2PasswordRequestForm, db: Session):
     user = db.query(models.User).filter(models.User.email == request.username).first()
+
     errors = {}
     if not user:
-        errors["password"] = "Wrong username"
+        errors["username"] = "Wrong username"
     elif not hashing.Hash.verify(request.password, user.password):
         errors["password"] = "Wrong password"
 
     if errors:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=errors)
 
-    access_token = token.create_access_token(data={"sub": user.email})
+    access_token = app_token.create_access_token(data={"sub": user.email})
+
     return {"access_token": access_token, "token_type": "bearer"}
 
 

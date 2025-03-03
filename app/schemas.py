@@ -181,3 +181,10 @@ class ShowUserType(BaseModel):
             raise HTTPException(status_code=400, detail=errors)
 
         return data
+
+class User(BaseModel):
+    username: str
+    password: str
+
+    class Config():
+        from_attributes = True
