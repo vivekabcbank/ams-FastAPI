@@ -20,5 +20,5 @@ def userSigninView(request: schemas.Login, db: Session = Depends(database.get_db
 
 
 @router.post("/insert-employee/")
-def insertEmployeeView():
-    return "hi"
+def insertEmployeeView(request: schemas.EmployeeBase, db: Session = Depends(database.get_db)):
+    return custom_auth.insertEmployee(request, db)
