@@ -119,6 +119,33 @@ class UserTypeBase(BaseModel):
         from_attributes = True
 
 
+class SiteBase(BaseModel):
+    owner_user_id: constr(min_length=1, max_length=250)
+    sitename: constr(min_length=1, max_length=250)
+    address: constr(min_length=1, max_length=250)
+    country: constr(min_length=1, max_length=250)
+    state: constr(min_length=1, max_length=250)
+    city: constr(min_length=1, max_length=250)
+    latitude: constr(min_length=1, max_length=20, pattern=r'^[0-9.]*$')
+    longitude: constr(min_length=1, max_length=20, pattern=r'^[0-9.]*$')
+
+    class Config:
+        from_attributes = True
+
+    @model_validator(mode="before")
+    def check_required_fields(cls, data):
+        errors = {}
+        try:
+            data["owner_user_id"] = str(decode_id(data.get("owner_user_id")))
+        except Exception as e:
+            errors["owner_user_id"] = "invalid owner_user_id"
+
+        if errors:
+            raise HTTPException(status_code=400, detail=errors)
+
+        return data
+
+
 class Token(BaseModel):
     access_token: str
     token_type: str

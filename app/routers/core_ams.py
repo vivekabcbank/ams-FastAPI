@@ -15,8 +15,8 @@ def insertUserTypeView(request: schemas.UserTypeBase, db: Session = Depends(data
 
 
 @router.post("/insert-site/")
-def insertSiteView():
-    return "hi"
+def insertSiteView(request: schemas.SiteBase, db: Session = Depends(database.get_db)):
+    return core_ams.insert_site(request, db)
 
 
 @router.get("/get-sites/")
