@@ -25,9 +25,9 @@ def getUserTypes(db: Session = Depends(database.get_db)):
     return core_ams.get_all_user_types(db)
 
 
-@router.get("/get-sites/")
-def getSitesView():
-    return "hi"
+@router.get("/get-sites/{owner_user_id}/{user_type}")
+def getSitesView(id, user_type, db: Session = Depends(database.get_db)):
+    return core_ams.get_sites(id, user_type, db)
 
 
 @router.get("/get-employee/")

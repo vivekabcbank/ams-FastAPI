@@ -167,3 +167,17 @@ class ShowUserType(BaseModel):
 
     class Config():
         from_attributes = True
+
+
+    @model_validator(mode="before")
+    def check_required_fields(cls, data):
+        errors = {}
+        try:
+            data["owner_user_id"] = str(decode_id(data.get("owner_user_id")))
+        except Exception as e:
+            errors["owner_user_id"] = "invalid owner_user_id"
+        set_trace()
+        if errors:
+            raise HTTPException(status_code=400, detail=errors)
+
+        return data
