@@ -1,4 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from .. import schemas, database
+from sqlalchemy.orm import Session
+from ..repository import core_ams
 
 router = APIRouter(
     tags=["core"],
@@ -6,12 +9,12 @@ router = APIRouter(
 )
 
 
-@router.get("/insert-user-type/")
-def insertUserTypeView():
-    return "hi"
+@router.post("/insert-user-type/")
+def insertUserTypeView(request: schemas.UserTypeBase, db: Session = Depends(database.get_db)):
+    return core_ams.insert_user_type(request, db)
 
 
-@router.get("/insert-site/")
+@router.post("/insert-site/")
 def insertSiteView():
     return "hi"
 
@@ -56,16 +59,16 @@ def insertCityView():
     return "hi"
 
 
-@router.post("/get-state-by-country/")
+@router.get("/get-state-by-country/")
 def getStateByCountry():
     return "hi"
 
 
-@router.post("/get-city-by-state/")
+@router.get("/get-city-by-state/")
 def getCityByState():
     return "hi"
 
 
-@router.post("/get-country/")
+@router.get("/get-country/")
 def getCountry():
     return "hi"

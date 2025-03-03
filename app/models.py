@@ -8,7 +8,7 @@ class UserType(Base):
     __tablename__ = 'usertype'
 
     id = Column(Integer, primary_key=True)
-    typename = Column(String(200), nullable=True)
+    typename = Column(String(200), nullable=False)
     description = Column(String, nullable=True)
     isdeleted = Column(Boolean, default=False)
     createddate = Column(DateTime, default=datetime.utcnow, nullable=False)

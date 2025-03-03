@@ -111,6 +111,14 @@ class EmployeeBase(BaseModel):
         return data
 
 
+class UserTypeBase(BaseModel):
+    typename: constr(min_length=1, max_length=250)
+    description: Optional[str]
+
+    class Config:
+        from_attributes = True
+
+
 class Token(BaseModel):
     access_token: str
     token_type: str

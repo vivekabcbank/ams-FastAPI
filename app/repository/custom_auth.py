@@ -25,13 +25,13 @@ def insertEmployee(request: schemas.EmployeeBase, db: Session):
         errors["invalid_email"] = f'Email is already in use2.'
 
     user_type = db.query(models.UserType).filter(models.UserType.isdeleted == False,
-                                              models.UserType.id == int(request.usertype_id)).first()
+                                                 models.UserType.id == int(request.usertype_id)).first()
 
-    # if not user_type:
-    #     errors["usertype_id"] = f'Invalid user type'
+    if not user_type:
+        errors["usertype_id"] = f'Invalid user type'
 
     site_info = db.query(models.Site).filter(models.Site.isdeleted == False,
-                                              models.Site.id == int(request.site_info_id)).first()
+                                             models.Site.id == int(request.site_info_id)).first()
 
     # if not site_info:
     #     errors["site_info_id"] = f'Invalid site info'
