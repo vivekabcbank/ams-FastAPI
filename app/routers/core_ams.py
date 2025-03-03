@@ -30,9 +30,9 @@ def getSitesView(id, user_type, db: Session = Depends(database.get_db)):
     return core_ams.get_sites(id, user_type, db)
 
 
-@router.get("/get-employee/")
-def getEmployeeView():
-    return "hi"
+@router.get("/get-employee/{site_info_id}")
+def getEmployeeView(site_info_id, db: Session = Depends(database.get_db)):
+    return core_ams.get_employee(site_info_id, db)
 
 
 @router.post("/apply-leave/")

@@ -86,3 +86,23 @@ def get_sites(id, user_type, db: Session):
     if errors:
         raise HTTPException(status_code=400, detail=errors)
     return sites
+
+
+def get_employee(site_info_id, db: Session):
+    errors = {}
+    try:
+        site_info_id = decode_id(site_info_id)
+        check_sites = db.query(models.Site).filter(models.Site.isdeleted == False,
+                                                   models.Site.id == site_info_id).first()
+        if not check_sites:
+            errors["site_info_id"] = "invalid site_info_id"
+    except Exception as e:
+        errors["site_info_id"] = "invalid site_info_id"
+
+    if errors:
+        raise HTTPException(status_code=400, detail=errors)
+
+    employees = db.query(models.Employee).filter(models.Employee.isdeleted == False,
+                                                 models.Employee.site_info_id == site_info_id
+                                                 ).all()
+    return employees
