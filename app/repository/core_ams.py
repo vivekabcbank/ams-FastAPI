@@ -38,3 +38,7 @@ def insert_site(request: schemas.SiteBase, db: Session):
     db.commit()
     db.refresh(new_user_type)
     return new_user_type
+
+def get_all_user_types(db: Session):
+    user_types = db.query(models.UserType).all()
+    return user_types

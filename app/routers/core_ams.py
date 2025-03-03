@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 from .. import schemas, database
 from sqlalchemy.orm import Session
 from ..repository import core_ams
+from typing import List
 
 router = APIRouter(
     tags=["core"],
@@ -17,6 +18,11 @@ def insertUserTypeView(request: schemas.UserTypeBase, db: Session = Depends(data
 @router.post("/insert-site/")
 def insertSiteView(request: schemas.SiteBase, db: Session = Depends(database.get_db)):
     return core_ams.insert_site(request, db)
+
+
+@router.get("/get-usertypes/", response_model=List[schemas.ShowUserType])
+def getUserTypes(db: Session = Depends(database.get_db)):
+    return core_ams.get_all_user_types(db)
 
 
 @router.get("/get-sites/")

@@ -158,3 +158,12 @@ class TokenData(BaseModel):
 class Login(BaseModel):
     username: str
     password: str
+
+
+class ShowUserType(BaseModel):
+    id: int
+    typename: str
+    description: str
+
+    class Config():
+        from_attributes = True
