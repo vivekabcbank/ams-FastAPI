@@ -130,3 +130,24 @@ def apply_leave(request: schemas.ApplyLeaveBase, db: Session):
         raise HTTPException(status_code=400, detail=errors)
 
     return leave
+
+def make_superviser(request: schemas.MakeSuperviserBase, db: Session):
+
+    try:
+        employee = db.query(models.Employee).filter(
+            models.Employee.id == request.employee_id,
+            models.Employee.isdeleted == False
+        ).first()
+
+        user = db.query(models.User).filter(
+            models.User.id == employee.user_id,
+            models.User.isdeleted == False
+        ).first()
+
+        user.password = hashing.Hash.bcrypt(request.password)
+        user.usertype_id = User_Type_id.SUPERVISER.value
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"something went wrong {e}")
+
+
+    return "User changed to superuser"

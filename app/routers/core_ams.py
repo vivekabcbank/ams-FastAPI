@@ -45,8 +45,8 @@ def applyLeaveView(request: schemas.ApplyLeaveBase, db: Session = Depends(databa
 
 
 @router.post("/make-superviser/")
-def makeSuperviserView(current_user: schemas.User = Depends(oauth2.get_current_user)):
-    return "hi"
+def makeSuperviserView(request: schemas.MakeSuperviserBase, db: Session = Depends(database.get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
+    return core_ams.make_superviser(request, db)
 
 
 @router.post("/mark-attendance/")

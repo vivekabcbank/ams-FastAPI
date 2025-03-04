@@ -225,3 +225,30 @@ class ApplyLeaveBase(BaseModel):
 
         return data
 
+
+class MakeSuperviserBase(BaseModel):
+    employee_id: constr(min_length=1, max_length=250)
+    usertype_id: constr(min_length=1, max_length=250)
+    password: constr(min_length=1, max_length=250)
+
+    class Config():
+        from_attributes = True
+
+    @model_validator(mode="before")
+    def check_required_fields(cls, data):
+        errors = {}
+
+        try:
+            data["employee_id"] = str(decode_id(data.get("employee_id")))
+        except Exception as e:
+            errors["employee_id"] = "invalid employee_id"
+
+        try:
+            data["usertype_id"] = str(decode_id(data.get("usertype_id")))
+        except Exception as e:
+            errors["usertype_id"] = "invalid usertype_id"
+
+        if errors:
+            raise HTTPException(status_code=400, detail=errors)
+
+        return data
