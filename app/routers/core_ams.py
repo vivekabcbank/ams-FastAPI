@@ -28,9 +28,9 @@ def getUserTypes(db: Session = Depends(database.get_db), current_user: schemas.U
 
 
 @router.get("/get-sites/{owner_user_id}/{user_type}/")
-def getSitesView(id, user_type, db: Session = Depends(database.get_db),
+def getSitesView(owner_user_id, user_type, db: Session = Depends(database.get_db),
                  current_user: schemas.User = Depends(oauth2.get_current_user)):
-    return core_ams.get_sites(id, user_type, db)
+    return core_ams.get_sites(owner_user_id, user_type, db)
 
 
 @router.get("/get-employee/{site_info_id}/")
@@ -40,8 +40,8 @@ def getEmployeeView(site_info_id, db: Session = Depends(database.get_db),
 
 
 @router.post("/apply-leave/")
-def applyLeaveView(current_user: schemas.User = Depends(oauth2.get_current_user)):
-    return "hi"
+def applyLeaveView(request: schemas.ApplyLeaveBase, db: Session = Depends(database.get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
+    return core_ams.apply_leave(request, db)
 
 
 @router.post("/make-superviser/")

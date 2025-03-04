@@ -106,3 +106,27 @@ def get_employee(site_info_id, db: Session):
                                                  models.Employee.site_info_id == site_info_id
                                                  ).all()
     return employees
+
+def apply_leave(request: schemas.ApplyLeaveBase, db: Session):
+    errors = {}
+
+    try:
+        check_exists = db.query(models.Employee).filter(
+            models.Employee.isdeleted == False,
+            models.Employee.site_info_id == request.site_info_id,
+            models.Employee.id == request.employee_id,
+        ).first()
+        if not check_exists:
+            errors['mismatch_data'] = "employee_id, site not matched"
+    except Exception as e:
+        errors['mismatch_data'] = "employee_id, site not matchedee"
+
+    leave = models.Leave(**request.model_dump())
+    db.add(leave)
+    db.commit()
+    db.refresh(leave)
+
+    if errors:
+        raise HTTPException(status_code=400, detail=errors)
+
+    return leave

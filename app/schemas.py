@@ -168,7 +168,6 @@ class ShowUserType(BaseModel):
     class Config():
         from_attributes = True
 
-
     @model_validator(mode="before")
     def check_required_fields(cls, data):
         errors = {}
@@ -176,11 +175,12 @@ class ShowUserType(BaseModel):
             data["owner_user_id"] = str(decode_id(data.get("owner_user_id")))
         except Exception as e:
             errors["owner_user_id"] = "invalid owner_user_id"
-        set_trace()
+
         if errors:
             raise HTTPException(status_code=400, detail=errors)
 
         return data
+
 
 class User(BaseModel):
     username: str
@@ -188,3 +188,40 @@ class User(BaseModel):
 
     class Config():
         from_attributes = True
+
+
+class ApplyLeaveBase(BaseModel):
+    employee_id: constr(min_length=1, max_length=250)
+    site_info_id: constr(min_length=1, max_length=250)
+    start_date: date
+    end_date: date
+    reason: constr(min_length=1, max_length=250)
+
+    class Config():
+        from_attributes = True
+
+    @model_validator(mode="before")
+    def check_required_fields(cls, data):
+        errors = {}
+
+        try:
+            data["employee_id"] = str(decode_id(data.get("employee_id")))
+        except Exception as e:
+            errors["employee_id"] = "invalid employee_id"
+
+        try:
+            data["site_info_id"] = str(decode_id(data.get("site_info_id")))
+        except Exception as e:
+            errors["site_info_id"] = "invalid site_info_id"
+
+        start_date = data.get("start_date")
+        end_date = data.get("end_date")
+
+        if start_date >= end_date:
+            errors['date mismatch'] = "End date shoule be grater than start date"
+
+        if errors:
+            raise HTTPException(status_code=400, detail=errors)
+
+        return data
+
